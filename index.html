@@ -1,0 +1,8873 @@
+
+<html>
+<head>
+<title>FHIRPath Comparison</title>
+<style>
+* {
+  font-size: 10px;
+  font-family: monospace;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-top: 0.1px solid #888;
+  border-left: 0.1px solid #888;
+  table-layout: fixed;
+}
+td, th {
+  border-right: 0.1px solid #888;
+  border-bottom: 0.1px solid #888;
+  padding: 4px;
+  width: 20%;
+}
+pre {
+  max-height: 100px;
+  overflow: hidden;
+}
+.good {
+  background-color: #efe;
+  color: #080;
+}
+.bad {
+  background-color: #fee;
+  color: #800;
+}
+.mixed {
+  background-color: #fffcee;
+  color: #860;
+}
+</style>
+</head>
+<body>
+<h1>FHIRPath Comparison</h1>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Expression</th>
+<th>Expected</th>
+<th>FHIRPath.js</th>
+<th>Medplum</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>Extract birthDate</td>
+<td>&quot;birthDate&quot;</td>
+<td><pre>[
+  &quot;1974-12-25&quot;
+]</pre></td>
+<td class="good"><pre>[
+  &quot;1974-12-25&quot;
+]</pre></td>
+<td class="good"><pre>[
+  &quot;1974-12-25&quot;
+]</pre></td>
+</tr>
+<tr>
+<td>patient telecom types</td>
+<td>&quot;telecom.use&quot;</td>
+<td><pre>[
+  &quot;home&quot;,
+  &quot;work&quot;,
+  &quot;mobile&quot;,
+  &quot;old&quot;
+]</pre></td>
+<td class="good"><pre>[
+  &quot;home&quot;,
+  &quot;work&quot;,
+  &quot;mobile&quot;,
+  &quot;old&quot;
+]</pre></td>
+<td class="good"><pre>[
+  &quot;home&quot;,
+  &quot;work&quot;,
+  &quot;mobile&quot;,
+  &quot;old&quot;
+]</pre></td>
+</tr>
+<tr>
+<td>testSimple</td>
+<td>&quot;name.given&quot;</td>
+<td><pre>[
+  &quot;Peter&quot;,
+  &quot;James&quot;,
+  &quot;Jim&quot;,
+  &quot;Peter&quot;,
+  &quot;James&quot;
+]</pre></td>
+<td class="good"><pre>[
+  &quot;Peter&quot;,
+  &quot;James&quot;,
+  &quot;Jim&quot;,
+  &quot;Peter&quot;,
+  &quot;James&quot;
+]</pre></td>
+<td class="good"><pre>[
+  &quot;Peter&quot;,
+  &quot;James&quot;,
+  &quot;Jim&quot;,
+  &quot;Peter&quot;,
+  &quot;James&quot;
+]</pre></td>
+</tr>
+<tr>
+<td>testSimpleNone</td>
+<td>&quot;name.suffix&quot;</td>
+<td>any</td>
+<td class="good"><pre>[]</pre></td>
+<td class="good"><pre>[]</pre></td>
+</tr>
+<tr>
+<td>testEscapedIdentifier</td>
+<td>&quot;name.`given`&quot;</td>
+<td><pre>[
+  &quot;Peter&quot;,
+  &quot;James&quot;,
+  &quot;Jim&quot;,
+  &quot;Peter&quot;,
+  &quot;James&quot;
+]</pre></td>
+<td class="good"><pre>[
+  &quot;Peter&quot;,
+  &quot;James&quot;,
+  &quot;Jim&quot;,
+  &quot;Peter&quot;,
+  &quot;James&quot;
+]</pre></td>
+<td class="good"><pre>[
+  &quot;Peter&quot;,
+  &quot;James&quot;,
+  &quot;Jim&quot;,
+  &quot;Peter&quot;,
+  &quot;James&quot;
+]</pre></td>
+</tr>
+<tr>
+<td>testSimpleBackTick1</td>
+<td>&quot;`Patient`.name.`given`&quot;</td>
+<td><pre>[
+  &quot;Peter&quot;,
+  &quot;James&quot;,
+  &quot;Jim&quot;,
+  &quot;Peter&quot;,
+  &quot;James&quot;
+]</pre></td>
+<td class="good"><pre>[
+  &quot;Peter&quot;,
+  &quot;James&quot;,
+  &quot;Jim&quot;,
+  &quot;Peter&quot;,
+  &quot;James&quot;
+]</pre></td>
+<td class="good"><pre>[
+  &quot;Peter&quot;,
+  &quot;James&quot;,
+  &quot;Jim&quot;,
+  &quot;Peter&quot;,
+  &quot;James&quot;
+]</pre></td>
+</tr>
+<tr>
+<td>testSimpleFail</td>
+<td>&quot;name.given1&quot;</td>
+<td>invalid</td>
+<td class="good"><pre>[]</pre></td>
+<td class="good"><pre>[]</pre></td>
+</tr>
+<tr>
+<td>testSimpleWithContext</td>
+<td>&quot;Patient.name.given&quot;</td>
+<td><pre>[
+  &quot;Peter&quot;,
+  &quot;James&quot;,
+  &quot;Jim&quot;,
+  &quot;Peter&quot;,
+  &quot;James&quot;
+]</pre></td>
+<td class="good"><pre>[
+  &quot;Peter&quot;,
+  &quot;James&quot;,
+  &quot;Jim&quot;,
+  &quot;Peter&quot;,
+  &quot;James&quot;
+]</pre></td>
+<td class="good"><pre>[
+  &quot;Peter&quot;,
+  &quot;James&quot;,
+  &quot;Jim&quot;,
+  &quot;Peter&quot;,
+  &quot;James&quot;
+]</pre></td>
+</tr>
+<tr>
+<td>testSimpleWithWrongContext</td>
+<td>&quot;Encounter.name.given&quot;</td>
+<td>invalid</td>
+<td class="good"><pre>[]</pre></td>
+<td class="good"><pre>[]</pre></td>
+</tr>
+<tr>
+<td>testPolymorphismA</td>
+<td>&quot;Observation.value.unit&quot;</td>
+<td><pre>[
+  &quot;lbs&quot;
+]</pre></td>
+<td class="bad"><pre>[]</pre></td>
+<td class="good"><pre>[
+  &quot;lbs&quot;
+]</pre></td>
+</tr>
+<tr>
+<td>testPolymorphismB</td>
+<td>&quot;Observation.valueQuantity.unit&quot;</td>
+<td>invalid</td>
+<td class="good"><pre>[
+  &quot;lbs&quot;
+]</pre></td>
+<td class="good"><pre>[
+  &quot;lbs&quot;
+]</pre></td>
+</tr>
+<tr>
+<td>testPolymorphismIsA</td>
+<td>&quot;Observation.value.is(Quantity)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testPolymorphismIsA</td>
+<td>&quot;Observation.value is Quantity&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testPolymorphismIsB</td>
+<td>&quot;Observation.value.is(Period).not()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>&quot;Period&quot; cannot be resolved to a valid type identifier</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testPolymorphismAsA</td>
+<td>&quot;Observation.value.as(Quantity).unit&quot;</td>
+<td><pre>[
+  &quot;lbs&quot;
+]</pre></td>
+<td class="bad"><pre>[]</pre></td>
+<td class="good"><pre>[
+  &quot;lbs&quot;
+]</pre></td>
+</tr>
+<tr>
+<td>testPolymorphismAsAFunction</td>
+<td>&quot;(Observation.value as Quantity).unit&quot;</td>
+<td><pre>[
+  &quot;lbs&quot;
+]</pre></td>
+<td class="bad"><pre>[]</pre></td>
+<td class="good"><pre>[
+  &quot;lbs&quot;
+]</pre></td>
+</tr>
+<tr>
+<td>testPolymorphismAsB</td>
+<td>&quot;(Observation.value as Period).unit&quot;</td>
+<td>invalid</td>
+<td class="mixed"><pre>&quot;Period&quot; cannot be resolved to a valid type identifier</pre></td>
+<td class="mixed"><pre>[]</pre></td>
+</tr>
+<tr>
+<td>testPolymorphismAsBFunction</td>
+<td>&quot;Observation.value.as(Period).start&quot;</td>
+<td>any</td>
+<td class="mixed"><pre>&quot;Period&quot; cannot be resolved to a valid type identifier</pre></td>
+<td class="mixed"><pre>[]</pre></td>
+</tr>
+<tr>
+<td>testDollarThis1</td>
+<td>&quot;Patient.name.given.where(substring($this.length()-3) = &apos;out&apos;)&quot;</td>
+<td>any</td>
+<td class="good"><pre>[]</pre></td>
+<td class="good"><pre>[]</pre></td>
+</tr>
+<tr>
+<td>testDollarThis2</td>
+<td>&quot;Patient.name.given.where(substring($this.length()-3) = &apos;ter&apos;)&quot;</td>
+<td><pre>[
+  &quot;Peter&quot;,
+  &quot;Peter&quot;
+]</pre></td>
+<td class="good"><pre>[
+  &quot;Peter&quot;,
+  &quot;Peter&quot;
+]</pre></td>
+<td class="good"><pre>[
+  &quot;Peter&quot;,
+  &quot;Peter&quot;
+]</pre></td>
+</tr>
+<tr>
+<td>testDollarOrderAllowed</td>
+<td>&quot;Patient.name.skip(1).given&quot;</td>
+<td><pre>[
+  &quot;Jim&quot;,
+  &quot;Peter&quot;,
+  &quot;James&quot;
+]</pre></td>
+<td class="good"><pre>[
+  &quot;Jim&quot;,
+  &quot;Peter&quot;,
+  &quot;James&quot;
+]</pre></td>
+<td class="good"><pre>[
+  &quot;Jim&quot;,
+  &quot;Peter&quot;,
+  &quot;James&quot;
+]</pre></td>
+</tr>
+<tr>
+<td>testDollarOrderAllowedA</td>
+<td>&quot;Patient.name.skip(3).given&quot;</td>
+<td>any</td>
+<td class="good"><pre>[]</pre></td>
+<td class="good"><pre>[]</pre></td>
+</tr>
+<tr>
+<td>testDollarOrderNotAllowed</td>
+<td>&quot;Patient.children().skip(1)&quot;</td>
+<td>invalid</td>
+<td class="mixed"><pre>[
+  &quot;example&quot;,
+  {
+    &quot;status&quot;: &quot;generated&quot;,
+    &quot;div&quot;: &quot;&lt;div xmlns=\&quot;http://www.w3.org/1999/xhtml\&quot;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;Name&lt;/td&gt;&lt;td&gt;Peter James \n              &lt;b&gt;Chalmers&lt;/b&gt; (\&quot;Jim\&quot;)\n            &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Address&lt;/td&gt;&lt;td&gt;534 Erewhon, Pleasantville, Vic, 3999&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Contacts&lt;/td&gt;&lt;td&gt;Home: unknown. Work: (03) 5555 6473&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Id&lt;/td&gt;&lt;td&gt;MRN: 12345 (Acme Healthcare)&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&quot;
+  },
+  {
+    &quot;use&quot;: &quot;usual&quot;,
+    &quot;type&quot;: {
+      &quot;coding&quot;: [
+        {
+          &quot;system&quot;: &quot;http://terminology.hl7.org/CodeSystem/v2-0203&quot;,
+          &quot;code&quot;: &quot;MR&quot;
+        }
+      ]
+    },
+    &quot;system&quot;: &quot;urn:oid:1.2.36.146.595.217.0.1&quot;,
+    &quot;value&quot;: &quot;12345&quot;,
+    &quot;period&quot;: {
+      &quot;start&quot;: &quot;2001-05-06&quot;
+    },
+    &quot;assigner&quot;: {
+      &quot;display&quot;: &quot;Acme Healthcare&quot;
+    }
+  },
+  true,
+  {
+    &quot;use&quot;: &quot;official&quot;,
+    &quot;family&quot;: &quot;Chalmers&quot;,
+    &quot;given&quot;: [
+      &quot;Peter&quot;,
+      &quot;James&quot;
+    ]
+  },
+  {
+    &quot;use&quot;: &quot;usual&quot;,
+    &quot;given&quot;: [
+      &quot;Jim&quot;
+    ]
+  },
+  {
+    &quot;use&quot;: &quot;maiden&quot;,
+    &quot;family&quot;: &quot;Windsor&quot;,
+    &quot;given&quot;: [
+      &quot;Peter&quot;,
+      &quot;James&quot;
+    ],
+    &quot;period&quot;: {
+      &quot;end&quot;: &quot;2002&quot;
+    }
+  },
+  {
+    &quot;use&quot;: &quot;home&quot;
+  },
+  {
+    &quot;system&quot;: &quot;phone&quot;,
+    &quot;value&quot;: &quot;(03) 5555 6473&quot;,
+    &quot;use&quot;: &quot;work&quot;,
+    &quot;rank&quot;: 1
+  },
+  {
+    &quot;system&quot;: &quot;phone&quot;,
+    &quot;value&quot;: &quot;(03) 3410 5613&quot;,
+    &quot;use&quot;: &quot;mobile&quot;,
+    &quot;rank&quot;: 2
+  },
+  {
+    &quot;system&quot;: &quot;phone&quot;,
+    &quot;value&quot;: &quot;(03) 5555 8834&quot;,
+    &quot;use&quot;: &quot;old&quot;,
+    &quot;period&quot;: {
+      &quot;end&quot;: &quot;2014&quot;
+    }
+  },
+  &quot;male&quot;,
+  {
+    &quot;extension&quot;: [
+      {
+        &quot;url&quot;: &quot;http://hl7.org/fhir/StructureDefinition/patient-birthTime&quot;,
+        &quot;valueDateTime&quot;: &quot;1974-12-25T14:35:45-05:00&quot;
+      }
+    ]
+  },
+  &quot;1974-12-25&quot;,
+  false,
+  {
+    &quot;use&quot;: &quot;home&quot;,
+    &quot;type&quot;: &quot;both&quot;,
+    &quot;text&quot;: &quot;534 Erewhon St PeasantVille, Rainbow, Vic  3999&quot;,
+    &quot;line&quot;: [
+      &quot;534 Erewhon St&quot;
+    ],
+    &quot;city&quot;: &quot;PleasantVille&quot;,
+    &quot;district&quot;: &quot;Rainbow&quot;,
+    &quot;state&quot;: &quot;Vic&quot;,
+    &quot;postalCode&quot;: &quot;3999&quot;,
+    &quot;period&quot;: {
+      &quot;start&quot;: &quot;1974-12-25&quot;
+    }
+  },
+  {
+    &quot;relationship&quot;: [
+      {
+        &quot;coding&quot;: [
+          {
+            &quot;system&quot;: &quot;http://terminology.hl7.org/CodeSystem/v2-0131&quot;,
+            &quot;code&quot;: &quot;N&quot;
+          }
+        ]
+      }
+    ],
+    &quot;name&quot;: {
+      &quot;_family&quot;: {
+        &quot;extension&quot;: [
+          {
+            &quot;url&quot;: &quot;http://hl7.org/fhir/StructureDefinition/humanname-own-prefix&quot;,
+            &quot;valueString&quot;: &quot;VV&quot;
+          }
+        ]
+      },
+      &quot;family&quot;: &quot;du Marché&quot;,
+      &quot;given&quot;: [
+        &quot;Bénédicte&quot;
+      ]
+    },
+    &quot;telecom&quot;: [
+      {
+        &quot;system&quot;: &quot;phone&quot;,
+        &quot;value&quot;: &quot;+33 (237) 998327&quot;
+      }
+    ],
+    &quot;address&quot;: {
+      &quot;use&quot;: &quot;home&quot;,
+      &quot;type&quot;: &quot;both&quot;,
+      &quot;line&quot;: [
+        &quot;534 Erewhon St&quot;
+      ],
+      &quot;city&quot;: &quot;PleasantVille&quot;,
+      &quot;district&quot;: &quot;Rainbow&quot;,
+      &quot;state&quot;: &quot;Vic&quot;,
+      &quot;postalCode&quot;: &quot;3999&quot;,
+      &quot;period&quot;: {
+        &quot;start&quot;: &quot;1974-12-25&quot;
+      }
+    },
+    &quot;gender&quot;: &quot;female&quot;,
+    &quot;period&quot;: {
+      &quot;start&quot;: &quot;2012&quot;
+    }
+  },
+  {
+    &quot;reference&quot;: &quot;Organization/1&quot;
+  }
+]</pre></td>
+<td class="mixed"><pre>[]</pre></td>
+</tr>
+<tr>
+<td>testLiteralTrue</td>
+<td>&quot;Patient.name.exists() = true&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralFalse</td>
+<td>&quot;Patient.name.empty() = false&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralString</td>
+<td>&quot;Patient.name.given.first() = &apos;Peter&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralInteger1</td>
+<td>&quot;1.convertsToInteger()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralInteger0</td>
+<td>&quot;0.convertsToInteger()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralIntegerNegative1</td>
+<td>&quot;(-1).convertsToInteger()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralIntegerNegative1Invalid</td>
+<td>&quot;-1.convertsToInteger()&quot;</td>
+<td>invalid</td>
+<td class="mixed"><pre>Unary - can only be applied to a number or Quantity.</pre></td>
+<td class="mixed"><pre>[
+  -1
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralIntegerMax</td>
+<td>&quot;2147483647.convertsToInteger()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralString</td>
+<td>&quot;&apos;test&apos;.convertsToString()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralStringEscapes</td>
+<td>&quot;&apos;\\\\\\/\\f\\r\\n\\t\\\&quot;\\`\\&apos;\\u002a&apos;.convertsToString()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralBooleanTrue</td>
+<td>&quot;true.convertsToBoolean()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralBooleanFalse</td>
+<td>&quot;false.convertsToBoolean()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralDecimal10</td>
+<td>&quot;1.0.convertsToDecimal()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralDecimal01</td>
+<td>&quot;0.1.convertsToDecimal()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralDecimal00</td>
+<td>&quot;0.0.convertsToDecimal()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralDecimalNegative01</td>
+<td>&quot;(-0.1).convertsToDecimal()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralDecimalNegative01Invalid</td>
+<td>&quot;-0.1.convertsToDecimal()&quot;</td>
+<td>invalid</td>
+<td class="mixed"><pre>Unary - can only be applied to a number or Quantity.</pre></td>
+<td class="mixed"><pre>[
+  -1
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralDecimalMax</td>
+<td>&quot;1234567890987654321.0.convertsToDecimal()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralDecimalStep</td>
+<td>&quot;0.00000001.convertsToDecimal()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralDateYear</td>
+<td>&quot;@2015.is(Date)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralDateMonth</td>
+<td>&quot;@2015-02.is(Date)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralDateDay</td>
+<td>&quot;@2015-02-04.is(Date)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralDateTimeYear</td>
+<td>&quot;@2015T.is(DateTime)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>line: 1; column: 5; message: mismatched input &apos;T&apos; expecting &lt;EOF&gt;</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralDateTimeMonth</td>
+<td>&quot;@2015-02T.is(DateTime)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>line: 1; column: 8; message: mismatched input &apos;T&apos; expecting &lt;EOF&gt;</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralDateTimeDay</td>
+<td>&quot;@2015-02-04T.is(DateTime)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>line: 1; column: 11; message: mismatched input &apos;T&apos; expecting &lt;EOF&gt;</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralDateTimeHour</td>
+<td>&quot;@2015-02-04T14.is(DateTime)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralDateTimeMinute</td>
+<td>&quot;@2015-02-04T14:34.is(DateTime)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralDateTimeSecond</td>
+<td>&quot;@2015-02-04T14:34:28.is(DateTime)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralDateTimeMillisecond</td>
+<td>&quot;@2015-02-04T14:34:28.123.is(DateTime)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralDateTimeUTC</td>
+<td>&quot;@2015-02-04T14:34:28Z.is(DateTime)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralDateTimeTimezoneOffset</td>
+<td>&quot;@2015-02-04T14:34:28+10:00.is(DateTime)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralTimeHour</td>
+<td>&quot;@T14.is(Time)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralTimeMinute</td>
+<td>&quot;@T14:34.is(Time)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralTimeSecond</td>
+<td>&quot;@T14:34:28.is(Time)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralTimeMillisecond</td>
+<td>&quot;@T14:34:28.123.is(Time)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralTimeUTC</td>
+<td>&quot;@T14:34:28Z.is(Time)&quot;</td>
+<td>invalid</td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralTimeTimezoneOffset</td>
+<td>&quot;@T14:34:28+10:00.is(Time)&quot;</td>
+<td>invalid</td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralQuantityDecimal</td>
+<td>&quot;10.1 &apos;mg&apos;.convertsToQuantity()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralQuantityInteger</td>
+<td>&quot;10 &apos;mg&apos;.convertsToQuantity()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralQuantityDay</td>
+<td>&quot;4 days.convertsToQuantity()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralIntegerNotEqual</td>
+<td>&quot;-3 != 3&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralIntegerEqual</td>
+<td>&quot;Patient.name.given.count() = 5&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testPolarityPrecedence</td>
+<td>&quot;-Patient.name.given.count() = -5&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralIntegerGreaterThan</td>
+<td>&quot;Patient.name.given.count() &gt; -3&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralIntegerCountNotEqual</td>
+<td>&quot;Patient.name.given.count() != 0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralIntegerLessThanTrue</td>
+<td>&quot;1 &lt; 2&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralIntegerLessThanFalse</td>
+<td>&quot;1 &lt; -2&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralIntegerLessThanPolarityTrue</td>
+<td>&quot;+1 &lt; +2&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralIntegerLessThanPolarityFalse</td>
+<td>&quot;-1 &lt; 2&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralDecimalGreaterThanNonZeroTrue</td>
+<td>&quot;Observation.value.value &gt; 180.0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralDecimalGreaterThanZeroTrue</td>
+<td>&quot;Observation.value.value &gt; 0.0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralDecimalGreaterThanIntegerTrue</td>
+<td>&quot;Observation.value.value &gt; 0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralDecimalLessThanInteger</td>
+<td>&quot;Observation.value.value &lt; 190&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralDecimalLessThanInvalid</td>
+<td>&quot;Observation.value.value &lt; &apos;test&apos;&quot;</td>
+<td>invalid</td>
+<td class="mixed"><pre>[]</pre></td>
+<td class="mixed"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testDateEqual</td>
+<td>&quot;Patient.birthDate = @1974-12-25&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testDateNotEqual</td>
+<td>&quot;Patient.birthDate != @1974-12-25T12:34:00&quot;</td>
+<td>any</td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testDateNotEqualTimezoneOffsetBefore</td>
+<td>&quot;Patient.birthDate != @1974-12-25T12:34:00-10:00&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testDateNotEqualTimezoneOffsetAfter</td>
+<td>&quot;Patient.birthDate != @1974-12-25T12:34:00+10:00&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testDateNotEqualUTC</td>
+<td>&quot;Patient.birthDate != @1974-12-25T12:34:00Z&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testDateNotEqualTimeSecond</td>
+<td>&quot;Patient.birthDate != @T12:14:15&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testDateNotEqualTimeMinute</td>
+<td>&quot;Patient.birthDate != @T12:14&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testDateNotEqualToday</td>
+<td>&quot;Patient.birthDate &lt; today()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>undefined</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testDateTimeGreaterThanDate</td>
+<td>&quot;now() &gt; Patient.birthDate&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>undefined</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralDateTimeTZGreater</td>
+<td>&quot;@2017-11-05T01:30:00.0-04:00 &gt; @2017-11-05T01:15:00.0-05:00&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralDateTimeTZLess</td>
+<td>&quot;@2017-11-05T01:30:00.0-04:00 &lt; @2017-11-05T01:15:00.0-05:00&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralDateTimeTZEqualFalse</td>
+<td>&quot;@2017-11-05T01:30:00.0-04:00 = @2017-11-05T01:15:00.0-05:00&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralDateTimeTZEqualTrue</td>
+<td>&quot;@2017-11-05T01:30:00.0-04:00 = @2017-11-05T00:30:00.0-05:00&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralUnicode</td>
+<td>&quot;Patient.name.given.first() = &apos;P\\u0065ter&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testCollectionNotEmpty</td>
+<td>&quot;Patient.name.given.empty().not()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testCollectionNotEqualEmpty</td>
+<td>&quot;Patient.name.given != {}&quot;</td>
+<td>any</td>
+<td class="mixed"><pre>[]</pre></td>
+<td class="mixed"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testExpressions</td>
+<td>&quot;Patient.name.select(given | family).distinct()&quot;</td>
+<td><pre>[
+  &quot;Peter&quot;,
+  &quot;James&quot;,
+  &quot;Chalmers&quot;,
+  &quot;Jim&quot;,
+  &quot;Windsor&quot;
+]</pre></td>
+<td class="good"><pre>[
+  &quot;Peter&quot;,
+  &quot;James&quot;,
+  &quot;Chalmers&quot;,
+  &quot;Jim&quot;,
+  &quot;Windsor&quot;
+]</pre></td>
+<td class="good"><pre>[
+  &quot;Peter&quot;,
+  &quot;James&quot;,
+  &quot;Chalmers&quot;,
+  &quot;Jim&quot;,
+  &quot;Windsor&quot;
+]</pre></td>
+</tr>
+<tr>
+<td>testExpressionsEqual</td>
+<td>&quot;Patient.name.given.count() = 1 + 4&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testNotEmpty</td>
+<td>&quot;Patient.name.empty().not()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEmpty</td>
+<td>&quot;Patient.link.empty()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralNotTrue</td>
+<td>&quot;true.not() = false&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLiteralNotFalse</td>
+<td>&quot;false.not() = true&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testIntegerBooleanNotTrue</td>
+<td>&quot;(0).not() = true&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testIntegerBooleanNotFalse</td>
+<td>&quot;(1).not() = false&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testNotInvalid</td>
+<td>&quot;(1|2).not() = false&quot;</td>
+<td>invalid</td>
+<td class="mixed"><pre>Unexpected collection[1,2]; expected singleton of type Boolean</pre></td>
+<td class="mixed"><pre>FhirPathError on &quot;(1|2).not() = false&quot;: Error: Expected 1 arguments</pre></td>
+</tr>
+<tr>
+<td>testStringYearConvertsToDate</td>
+<td>&quot;&apos;2015&apos;.convertsToDate()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringMonthConvertsToDate</td>
+<td>&quot;&apos;2015-02&apos;.convertsToDate()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringDayConvertsToDate</td>
+<td>&quot;&apos;2015-02-04&apos;.convertsToDate()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringYearConvertsToDateTime</td>
+<td>&quot;&apos;2015&apos;.convertsToDateTime()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringMonthConvertsToDateTime</td>
+<td>&quot;&apos;2015-02&apos;.convertsToDateTime()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringDayConvertsToDateTime</td>
+<td>&quot;&apos;2015-02-04&apos;.convertsToDateTime()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringHourConvertsToDateTime</td>
+<td>&quot;&apos;2015-02-04T14&apos;.convertsToDateTime()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringMinuteConvertsToDateTime</td>
+<td>&quot;&apos;2015-02-04T14:34&apos;.convertsToDateTime()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringSecondConvertsToDateTime</td>
+<td>&quot;&apos;2015-02-04T14:34:28&apos;.convertsToDateTime()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringMillisecondConvertsToDateTime</td>
+<td>&quot;&apos;2015-02-04T14:34:28.123&apos;.convertsToDateTime()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringUTCConvertsToDateTime</td>
+<td>&quot;&apos;2015-02-04T14:34:28Z&apos;.convertsToDateTime()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringTZConvertsToDateTime</td>
+<td>&quot;&apos;2015-02-04T14:34:28+10:00&apos;.convertsToDateTime()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringHourConvertsToTime</td>
+<td>&quot;&apos;14&apos;.convertsToTime()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringMinuteConvertsToTime</td>
+<td>&quot;&apos;14:34&apos;.convertsToTime()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringSecondConvertsToTime</td>
+<td>&quot;&apos;14:34:28&apos;.convertsToTime()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringMillisecondConvertsToTime</td>
+<td>&quot;&apos;14:34:28.123&apos;.convertsToTime()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testIntegerLiteralConvertsToInteger</td>
+<td>&quot;1.convertsToInteger()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testIntegerLiteralIsInteger</td>
+<td>&quot;1.is(Integer)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testIntegerLiteralIsSystemInteger</td>
+<td>&quot;1.is(System.Integer)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testStringLiteralConvertsToInteger</td>
+<td>&quot;&apos;1&apos;.convertsToInteger()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringLiteralConvertsToIntegerFalse</td>
+<td>&quot;&apos;a&apos;.convertsToInteger().not()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringDecimalConvertsToIntegerFalse</td>
+<td>&quot;&apos;1.0&apos;.convertsToInteger().not()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringLiteralIsNotInteger</td>
+<td>&quot;&apos;1&apos;.is(Integer).not()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLiteralConvertsToInteger</td>
+<td>&quot;true.convertsToInteger()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLiteralIsNotInteger</td>
+<td>&quot;true.is(Integer).not()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testDateIsNotInteger</td>
+<td>&quot;@2013-04-05.is(Integer).not()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testIntegerLiteralToInteger</td>
+<td>&quot;1.toInteger() = 1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringIntegerLiteralToInteger</td>
+<td>&quot;&apos;1&apos;.toInteger() = 1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testDecimalLiteralToInteger</td>
+<td>&quot;&apos;1.1&apos;.toInteger() = {}&quot;</td>
+<td>any</td>
+<td class="good"><pre>[]</pre></td>
+<td class="good"><pre>[]</pre></td>
+</tr>
+<tr>
+<td>testDecimalLiteralToIntegerIsEmpty</td>
+<td>&quot;&apos;1.1&apos;.toInteger().empty()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLiteralToInteger</td>
+<td>&quot;true.toInteger() = 1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testIntegerLiteralConvertsToDecimal</td>
+<td>&quot;1.convertsToDecimal()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testIntegerLiteralIsNotDecimal</td>
+<td>&quot;1.is(Decimal).not()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testDecimalLiteralConvertsToDecimal</td>
+<td>&quot;1.0.convertsToDecimal()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testDecimalLiteralIsDecimal</td>
+<td>&quot;1.0.is(Decimal)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringIntegerLiteralConvertsToDecimal</td>
+<td>&quot;&apos;1&apos;.convertsToDecimal()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringIntegerLiteralIsNotDecimal</td>
+<td>&quot;&apos;1&apos;.is(Decimal).not()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringLiteralConvertsToDecimalFalse</td>
+<td>&quot;&apos;1.a&apos;.convertsToDecimal().not()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringDecimalLiteralConvertsToDecimal</td>
+<td>&quot;&apos;1.0&apos;.convertsToDecimal()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringDecimalLiteralIsNotDecimal</td>
+<td>&quot;&apos;1.0&apos;.is(Decimal).not()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLiteralConvertsToDecimal</td>
+<td>&quot;true.convertsToDecimal()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLiteralIsNotDecimal</td>
+<td>&quot;true.is(Decimal).not()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testIntegerLiteralToDecimal</td>
+<td>&quot;1.toDecimal() = 1.0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testIntegerLiteralToDeciamlEquivalent</td>
+<td>&quot;1.toDecimal() ~ 1.0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testDecimalLiteralToDecimal</td>
+<td>&quot;1.0.toDecimal() = 1.0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testDecimalLiteralToDecimalEqual</td>
+<td>&quot;&apos;1.1&apos;.toDecimal() = 1.1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLiteralToDecimal</td>
+<td>&quot;true.toDecimal() = 1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testIntegerLiteralConvertsToQuantity</td>
+<td>&quot;1.convertsToQuantity()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testIntegerLiteralIsNotQuantity</td>
+<td>&quot;1.is(Quantity).not()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testDecimalLiteralConvertsToQuantity</td>
+<td>&quot;1.0.convertsToQuantity()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testDecimalLiteralIsNotQuantity</td>
+<td>&quot;1.0.is(System.Quantity).not()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringIntegerLiteralConvertsToQuantity</td>
+<td>&quot;&apos;1&apos;.convertsToQuantity()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringIntegerLiteralIsNotQuantity</td>
+<td>&quot;&apos;1&apos;.is(System.Quantity).not()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringQuantityLiteralConvertsToQuantity</td>
+<td>&quot;&apos;1 day&apos;.convertsToQuantity()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringQuantityWeekConvertsToQuantity</td>
+<td>&quot;&apos;1 \\&apos;wk\\&apos;&apos;.convertsToQuantity()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringQuantityWeekConvertsToQuantityFalse</td>
+<td>&quot;&apos;1 wk&apos;.convertsToQuantity().not()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testStringDecimalLiteralConvertsToQuantityFalse</td>
+<td>&quot;&apos;1.a&apos;.convertsToQuantity().not()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testStringDecimalLiteralConvertsToQuantity</td>
+<td>&quot;&apos;1.0&apos;.convertsToQuantity()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringDecimalLiteralIsNotSystemQuantity</td>
+<td>&quot;&apos;1.0&apos;.is(System.Quantity).not()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLiteralConvertsToQuantity</td>
+<td>&quot;true.convertsToQuantity()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLiteralIsNotSystemQuantity</td>
+<td>&quot;true.is(System.Quantity).not()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testIntegerLiteralToQuantity</td>
+<td>&quot;1.toQuantity() = 1 &apos;1&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testDecimalLiteralToQuantity</td>
+<td>&quot;1.0.toQuantity() = 1.0 &apos;1&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringIntegerLiteralToQuantity</td>
+<td>&quot;&apos;1&apos;.toQuantity()&quot;</td>
+<td><pre>[
+  &quot;1 &apos;1&apos;&quot;
+]</pre></td>
+<td class="good"><pre>[
+  &quot;1 &apos;1&apos;&quot;
+]</pre></td>
+<td class="bad"><pre>[
+  {
+    &quot;value&quot;: 1,
+    &quot;unit&quot;: &quot;1&quot;
+  }
+]</pre></td>
+</tr>
+<tr>
+<td>testStringQuantityLiteralToQuantity</td>
+<td>&quot;&apos;1 day&apos;.toQuantity() = 1 day&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringQuantityDayLiteralToQuantity</td>
+<td>&quot;&apos;1 day&apos;.toQuantity() = 1 &apos;{day}&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringQuantityWeekLiteralToQuantity</td>
+<td>&quot;&apos;1 \\&apos;wk\\&apos;&apos;.toQuantity() = 1 &apos;wk&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringDecimalLiteralToQuantity</td>
+<td>&quot;&apos;1.0&apos;.toQuantity() ~ 1 &apos;1&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testIntegerLiteralConvertsToBoolean</td>
+<td>&quot;1.convertsToBoolean()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testIntegerLiteralConvertsToBooleanFalse</td>
+<td>&quot;2.convertsToBoolean()&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testNegativeIntegerLiteralConvertsToBooleanFalse</td>
+<td>&quot;(-1).convertsToBoolean()&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testIntegerLiteralFalseConvertsToBoolean</td>
+<td>&quot;0.convertsToBoolean()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testDecimalLiteralConvertsToBoolean</td>
+<td>&quot;1.0.convertsToBoolean()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringTrueLiteralConvertsToBoolean</td>
+<td>&quot;&apos;true&apos;.convertsToBoolean()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringFalseLiteralConvertsToBoolean</td>
+<td>&quot;&apos;false&apos;.convertsToBoolean()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringFalseLiteralAlsoConvertsToBoolean</td>
+<td>&quot;&apos;False&apos;.convertsToBoolean()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testTrueLiteralConvertsToBoolean</td>
+<td>&quot;true.convertsToBoolean()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testFalseLiteralConvertsToBoolean</td>
+<td>&quot;false.convertsToBoolean()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testIntegerLiteralToBoolean</td>
+<td>&quot;1.toBoolean()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testIntegerLiteralToBooleanEmpty</td>
+<td>&quot;2.toBoolean()&quot;</td>
+<td>any</td>
+<td class="good"><pre>[]</pre></td>
+<td class="good"><pre>[]</pre></td>
+</tr>
+<tr>
+<td>testIntegerLiteralToBooleanFalse</td>
+<td>&quot;0.toBoolean()&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testStringTrueToBoolean</td>
+<td>&quot;&apos;true&apos;.toBoolean()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringFalseToBoolean</td>
+<td>&quot;&apos;false&apos;.toBoolean()&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testIntegerLiteralConvertsToString</td>
+<td>&quot;1.convertsToString()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testIntegerLiteralIsNotString</td>
+<td>&quot;1.is(String).not()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testNegativeIntegerLiteralConvertsToString</td>
+<td>&quot;(-1).convertsToString()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testDecimalLiteralConvertsToString</td>
+<td>&quot;1.0.convertsToString()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStringLiteralConvertsToString</td>
+<td>&quot;&apos;true&apos;.convertsToString()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLiteralConvertsToString</td>
+<td>&quot;true.convertsToString()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testQuantityLiteralConvertsToString</td>
+<td>&quot;1 &apos;wk&apos;.convertsToString()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testIntegerLiteralToString</td>
+<td>&quot;1.toString()&quot;</td>
+<td><pre>[
+  1
+]</pre></td>
+<td class="mixed"><pre>[
+  &quot;1&quot;
+]</pre></td>
+<td class="mixed"><pre>[
+  &quot;1&quot;
+]</pre></td>
+</tr>
+<tr>
+<td>testNegativeIntegerLiteralToString</td>
+<td>&quot;(-1).toString()&quot;</td>
+<td><pre>[
+  -1
+]</pre></td>
+<td class="mixed"><pre>[
+  &quot;-1&quot;
+]</pre></td>
+<td class="mixed"><pre>[
+  &quot;-1&quot;
+]</pre></td>
+</tr>
+<tr>
+<td>testDecimalLiteralToString</td>
+<td>&quot;1.0.toString()&quot;</td>
+<td><pre>[
+  1
+]</pre></td>
+<td class="mixed"><pre>[
+  &quot;1&quot;
+]</pre></td>
+<td class="mixed"><pre>[
+  &quot;1&quot;
+]</pre></td>
+</tr>
+<tr>
+<td>testStringLiteralToString</td>
+<td>&quot;&apos;true&apos;.toString()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="mixed"><pre>[
+  &quot;true&quot;
+]</pre></td>
+<td class="mixed"><pre>[
+  &quot;true&quot;
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLiteralToString</td>
+<td>&quot;true.toString()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="mixed"><pre>[
+  &quot;true&quot;
+]</pre></td>
+<td class="mixed"><pre>[
+  &quot;true&quot;
+]</pre></td>
+</tr>
+<tr>
+<td>testQuantityLiteralWkToString</td>
+<td>&quot;1 &apos;wk&apos;.toString()&quot;</td>
+<td><pre>[
+  &quot;1 &apos;wk&apos;&quot;
+]</pre></td>
+<td class="good"><pre>[
+  &quot;1 &apos;wk&apos;&quot;
+]</pre></td>
+<td class="good"><pre>[
+  &quot;1 &apos;wk&apos;&quot;
+]</pre></td>
+</tr>
+<tr>
+<td>testQuantityLiteralWeekToString</td>
+<td>&quot;1 week.toString()&quot;</td>
+<td><pre>[
+  &quot;1 &apos;{week}&apos;&quot;
+]</pre></td>
+<td class="bad"><pre>[
+  &quot;1 week&quot;
+]</pre></td>
+<td class="good"><pre>[
+  &quot;1 &apos;{week}&apos;&quot;
+]</pre></td>
+</tr>
+<tr>
+<td>testAllTrue1</td>
+<td>&quot;Patient.name.select(given.exists()).allTrue()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testAllTrue2</td>
+<td>&quot;Patient.name.select(period.exists()).allTrue()&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testAllTrue3</td>
+<td>&quot;Patient.name.all(given.exists())&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testAllTrue4</td>
+<td>&quot;Patient.name.all(period.exists())&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testSubSetOf1</td>
+<td>&quot;Patient.name.first().subsetOf($this.name)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[]</pre></td>
+</tr>
+<tr>
+<td>testSubSetOf2</td>
+<td>&quot;Patient.name.subsetOf($this.name.first()).not()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[]</pre></td>
+</tr>
+<tr>
+<td>testSuperSetOf1</td>
+<td>&quot;Patient.name.first().supersetOf($this.name).not()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[]</pre></td>
+</tr>
+<tr>
+<td>testSuperSetOf2</td>
+<td>&quot;Patient.name.supersetOf($this.name.first())&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[]</pre></td>
+</tr>
+<tr>
+<td>testQuantity1</td>
+<td>&quot;4.0000 &apos;g&apos; = 4000.0 &apos;mg&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testQuantity2</td>
+<td>&quot;4 &apos;g&apos; ~ 4000 &apos;mg&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testQuantity3</td>
+<td>&quot;4 &apos;g&apos; != 4040 &apos;mg&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testQuantity4</td>
+<td>&quot;4 &apos;g&apos; ~ 4040 &apos;mg&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testQuantity5</td>
+<td>&quot;7 days = 1 week&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testQuantity6</td>
+<td>&quot;7 days = 1 &apos;wk&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[]</pre></td>
+<td class="bad"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testQuantity7</td>
+<td>&quot;6 days &lt; 1 week&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testQuantity8</td>
+<td>&quot;8 days &gt; 1 week&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testQuantity9</td>
+<td>&quot;2.0 &apos;cm&apos; * 2.0 &apos;m&apos; = 0.040 &apos;m2&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testQuantity10</td>
+<td>&quot;4.0 &apos;g&apos; / 2.0 &apos;m&apos; = 2 &apos;g/m&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testQuantity11</td>
+<td>&quot;1.0 &apos;m&apos; / 1.0 &apos;m&apos; = 1 &apos;1&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testCollectionBoolean1</td>
+<td>&quot;iif(1 | 2 | 3, true, false)&quot;</td>
+<td>invalid</td>
+<td class="mixed"><pre>[
+  false
+]</pre></td>
+<td class="mixed"><pre>FhirPathError on &quot;iif(1 | 2 | 3, true, false)&quot;: Error: Expected criterion to evaluate to a Boolean</pre></td>
+</tr>
+<tr>
+<td>testCollectionBoolean2</td>
+<td>&quot;iif({}, true, false)&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testCollectionBoolean3</td>
+<td>&quot;iif(true, true, false)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testCollectionBoolean4</td>
+<td>&quot;iif({} | true, true, false)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testCollectionBoolean5</td>
+<td>&quot;iif(true, true, 1/0)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testCollectionBoolean6</td>
+<td>&quot;iif(false, 1/0, true)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testDistinct1</td>
+<td>&quot;(1 | 2 | 3).isDistinct()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testDistinct2</td>
+<td>&quot;Questionnaire.descendants().linkId.isDistinct()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testDistinct3</td>
+<td>&quot;Questionnaire.descendants().linkId.select(substring(0,1)).isDistinct().not()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testDistinct4</td>
+<td>&quot;(1 | 2 | 3).distinct()&quot;</td>
+<td><pre>[
+  1,
+  2,
+  3
+]</pre></td>
+<td class="good"><pre>[
+  1,
+  2,
+  3
+]</pre></td>
+<td class="good"><pre>[
+  1,
+  2,
+  3
+]</pre></td>
+</tr>
+<tr>
+<td>testDistinct5</td>
+<td>&quot;Questionnaire.descendants().linkId.distinct().count()&quot;</td>
+<td><pre>[
+  10
+]</pre></td>
+<td class="good"><pre>[
+  10
+]</pre></td>
+<td class="bad"><pre>[
+  0
+]</pre></td>
+</tr>
+<tr>
+<td>testDistinct6</td>
+<td>&quot;Questionnaire.descendants().linkId.select(substring(0,1)).distinct().count()&quot;</td>
+<td><pre>[
+  2
+]</pre></td>
+<td class="good"><pre>[
+  2
+]</pre></td>
+<td class="bad"><pre>[
+  0
+]</pre></td>
+</tr>
+<tr>
+<td>testCount1</td>
+<td>&quot;Patient.name.count()&quot;</td>
+<td><pre>[
+  3
+]</pre></td>
+<td class="good"><pre>[
+  3
+]</pre></td>
+<td class="good"><pre>[
+  3
+]</pre></td>
+</tr>
+<tr>
+<td>testCount2</td>
+<td>&quot;Patient.name.count() = 3&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testCount3</td>
+<td>&quot;Patient.name.first().count()&quot;</td>
+<td><pre>[
+  1
+]</pre></td>
+<td class="good"><pre>[
+  1
+]</pre></td>
+<td class="good"><pre>[
+  1
+]</pre></td>
+</tr>
+<tr>
+<td>testCount4</td>
+<td>&quot;Patient.name.first().count() = 1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testWhere1</td>
+<td>&quot;Patient.name.count() = 3&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testWhere2</td>
+<td>&quot;Patient.name.where(given = &apos;Jim&apos;).count() = 1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testWhere3</td>
+<td>&quot;Patient.name.where(given = &apos;X&apos;).count() = 0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testWhere4</td>
+<td>&quot;Patient.name.where($this.given = &apos;Jim&apos;).count() = 1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testSelect1</td>
+<td>&quot;Patient.name.select(given).count() = 5&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testSelect2</td>
+<td>&quot;Patient.name.select(given | family).count() = 7&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testRepeat1</td>
+<td>&quot;ValueSet.expansion.repeat(contains).count() = 10&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="mixed"><pre>[
+  false
+]</pre></td>
+<td class="mixed"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testRepeat2</td>
+<td>&quot;Questionnaire.repeat(item).code.count() = 11&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testRepeat3</td>
+<td>&quot;Questionnaire.descendants().code.count() = 23&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testRepeat4</td>
+<td>&quot;Questionnaire.children().code.count() = 2&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testAggregate1</td>
+<td>&quot;(1|2|3|4|5|6|7|8|9).aggregate($this+$total, 0) = 45&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>FhirPathError on &quot;(1|2|3|4|5|6|7|8|9).aggregate($this+$total, 0) = 45&quot;: Error: Unrecognized function: aggregate</pre></td>
+</tr>
+<tr>
+<td>testAggregate2</td>
+<td>&quot;(1|2|3|4|5|6|7|8|9).aggregate($this+$total, 2) = 47&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>FhirPathError on &quot;(1|2|3|4|5|6|7|8|9).aggregate($this+$total, 2) = 47&quot;: Error: Unrecognized function: aggregate</pre></td>
+</tr>
+<tr>
+<td>testAggregate3</td>
+<td>&quot;(1|2|3|4|5|6|7|8|9).aggregate(iif($total.empty(), $this, iif($this &lt; $total, $this, $total))) = 1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>FhirPathError on &quot;(1|2|3|4|5|6|7|8|9).aggregate(iif($total.empty(), $this, iif($this &lt; $total, $this, $total))) = 1&quot;: Error: Unrecognized function: aggregate</pre></td>
+</tr>
+<tr>
+<td>testAggregate4</td>
+<td>&quot;(1|2|3|4|5|6|7|8|9).aggregate(iif($total.empty(), $this, iif($this &gt; $total, $this, $total))) = 9&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>FhirPathError on &quot;(1|2|3|4|5|6|7|8|9).aggregate(iif($total.empty(), $this, iif($this &gt; $total, $this, $total))) = 9&quot;: Error: Unrecognized function: aggregate</pre></td>
+</tr>
+<tr>
+<td>testIndexer1</td>
+<td>&quot;Patient.name[0].given = &apos;Peter&apos; | &apos;James&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testIndexer2</td>
+<td>&quot;Patient.name[1].given = &apos;Jim&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testSingle1</td>
+<td>&quot;Patient.name.first().single().exists()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testSingle2</td>
+<td>&quot;Patient.name.single().exists()&quot;</td>
+<td>invalid</td>
+<td class="mixed"><pre>Expected single</pre></td>
+<td class="mixed"><pre>FhirPathError on &quot;Patient.name.single().exists()&quot;: Error: Expected input length one for single()</pre></td>
+</tr>
+<tr>
+<td>testFirstLast1</td>
+<td>&quot;Patient.name.first().given = &apos;Peter&apos; | &apos;James&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testFirstLast2</td>
+<td>&quot;Patient.name.last().given = &apos;Peter&apos; | &apos;James&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testTail1</td>
+<td>&quot;(0 | 1 | 2).tail() = 1 | 2&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testTail2</td>
+<td>&quot;Patient.name.tail().given = &apos;Jim&apos; | &apos;Peter&apos; | &apos;James&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testSkip1</td>
+<td>&quot;(0 | 1 | 2).skip(1) = 1 | 2&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testSkip2</td>
+<td>&quot;(0 | 1 | 2).skip(2) = 2&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testSkip3</td>
+<td>&quot;Patient.name.skip(1).given.trace(&apos;test&apos;) = &apos;Jim&apos; | &apos;Peter&apos; | &apos;James&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testSkip4</td>
+<td>&quot;Patient.name.skip(3).given.exists() = false&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testTake1</td>
+<td>&quot;(0 | 1 | 2).take(1) = 0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testTake2</td>
+<td>&quot;(0 | 1 | 2).take(2) = 0 | 1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testTake3</td>
+<td>&quot;Patient.name.take(1).given = &apos;Peter&apos; | &apos;James&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testTake4</td>
+<td>&quot;Patient.name.take(2).given = &apos;Peter&apos; | &apos;James&apos; | &apos;Jim&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testTake5</td>
+<td>&quot;Patient.name.take(3).given.count() = 5&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testTake6</td>
+<td>&quot;Patient.name.take(4).given.count() = 5&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testTake7</td>
+<td>&quot;Patient.name.take(0).given.exists() = false&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testIif1</td>
+<td>&quot;iif(Patient.name.exists(), &apos;named&apos;, &apos;unnamed&apos;) = &apos;named&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testIif2</td>
+<td>&quot;iif(Patient.name.empty(), &apos;unnamed&apos;, &apos;named&apos;) = &apos;named&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testIif3</td>
+<td>&quot;iif(true, true, (1 | 2).toString())&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testIif4</td>
+<td>&quot;iif(false, (1 | 2).toString(), true)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testToInteger1</td>
+<td>&quot;&apos;1&apos;.toInteger() = 1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testToInteger2</td>
+<td>&quot;&apos;-1&apos;.toInteger() = -1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testToInteger3</td>
+<td>&quot;&apos;0&apos;.toInteger() = 0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testToInteger4</td>
+<td>&quot;&apos;0.0&apos;.toInteger().empty()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testToInteger5</td>
+<td>&quot;&apos;st&apos;.toInteger().empty()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testToDecimal1</td>
+<td>&quot;&apos;1&apos;.toDecimal() = 1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testToDecimal2</td>
+<td>&quot;&apos;-1&apos;.toInteger() = -1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testToDecimal3</td>
+<td>&quot;&apos;0&apos;.toDecimal() = 0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testToDecimal4</td>
+<td>&quot;&apos;0.0&apos;.toDecimal() = 0.0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testToDecimal5</td>
+<td>&quot;&apos;st&apos;.toDecimal().empty()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testToString1</td>
+<td>&quot;1.toString() = &apos;1&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testToString2</td>
+<td>&quot;&apos;-1&apos;.toInteger() = -1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testToString3</td>
+<td>&quot;0.toString() = &apos;0&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testToString4</td>
+<td>&quot;0.0.toString() = &apos;0.0&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="mixed"><pre>[
+  false
+]</pre></td>
+<td class="mixed"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testToString5</td>
+<td>&quot;@2014-12-14.toString() = &apos;2014-12-14&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testCase1</td>
+<td>&quot;&apos;t&apos;.upper() = &apos;T&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testCase2</td>
+<td>&quot;&apos;t&apos;.lower() = &apos;t&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testCase3</td>
+<td>&quot;&apos;T&apos;.upper() = &apos;T&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testCase4</td>
+<td>&quot;&apos;T&apos;.lower() = &apos;t&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testToChars1</td>
+<td>&quot;&apos;t2&apos;.toChars() = &apos;t&apos; | &apos;2&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testSubstring1</td>
+<td>&quot;&apos;12345&apos;.substring(2) = &apos;345&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testSubstring2</td>
+<td>&quot;&apos;12345&apos;.substring(2,1) = &apos;3&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testSubstring3</td>
+<td>&quot;&apos;12345&apos;.substring(2,5) = &apos;345&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testSubstring4</td>
+<td>&quot;&apos;12345&apos;.substring(25).empty()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testSubstring5</td>
+<td>&quot;&apos;12345&apos;.substring(-1).empty()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStartsWith1</td>
+<td>&quot;&apos;12345&apos;.startsWith(&apos;2&apos;) = false&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStartsWith2</td>
+<td>&quot;&apos;12345&apos;.startsWith(&apos;1&apos;) = true&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStartsWith3</td>
+<td>&quot;&apos;12345&apos;.startsWith(&apos;12&apos;) = true&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStartsWith4</td>
+<td>&quot;&apos;12345&apos;.startsWith(&apos;13&apos;) = false&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStartsWith5</td>
+<td>&quot;&apos;12345&apos;.startsWith(&apos;12345&apos;) = true&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStartsWith6</td>
+<td>&quot;&apos;12345&apos;.startsWith(&apos;123456&apos;) = false&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testStartsWith7</td>
+<td>&quot;&apos;12345&apos;.startsWith(&apos;&apos;) = true&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEndsWith1</td>
+<td>&quot;&apos;12345&apos;.endsWith(&apos;2&apos;) = false&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEndsWith2</td>
+<td>&quot;&apos;12345&apos;.endsWith(&apos;5&apos;) = true&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEndsWith3</td>
+<td>&quot;&apos;12345&apos;.endsWith(&apos;45&apos;) = true&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEndsWith4</td>
+<td>&quot;&apos;12345&apos;.endsWith(&apos;35&apos;) = false&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEndsWith5</td>
+<td>&quot;&apos;12345&apos;.endsWith(&apos;12345&apos;) = true&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEndsWith6</td>
+<td>&quot;&apos;12345&apos;.endsWith(&apos;012345&apos;) = false&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEndsWith7</td>
+<td>&quot;&apos;12345&apos;.endsWith(&apos;&apos;) = true&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testContainsString1</td>
+<td>&quot;&apos;12345&apos;.contains(&apos;6&apos;) = false&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testContainsString2</td>
+<td>&quot;&apos;12345&apos;.contains(&apos;5&apos;) = true&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testContainsString3</td>
+<td>&quot;&apos;12345&apos;.contains(&apos;45&apos;) = true&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testContainsString4</td>
+<td>&quot;&apos;12345&apos;.contains(&apos;35&apos;) = false&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testContainsString5</td>
+<td>&quot;&apos;12345&apos;.contains(&apos;12345&apos;) = true&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testContainsString6</td>
+<td>&quot;&apos;12345&apos;.contains(&apos;012345&apos;) = false&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testContainsString7</td>
+<td>&quot;&apos;12345&apos;.contains(&apos;&apos;) = true&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLength1</td>
+<td>&quot;&apos;123456&apos;.length() = 6&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLength2</td>
+<td>&quot;&apos;12345&apos;.length() = 5&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLength3</td>
+<td>&quot;&apos;123&apos;.length() = 3&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLength4</td>
+<td>&quot;&apos;1&apos;.length() = 1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLength5</td>
+<td>&quot;&apos;&apos;.length() = 0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testTrace1</td>
+<td>&quot;name.given.trace(&apos;test&apos;).count() = 5&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testTrace2</td>
+<td>&quot;name.trace(&apos;test&apos;, given).count() = 3&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testToday1</td>
+<td>&quot;Patient.birthDate &lt; today()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>undefined</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testToday2</td>
+<td>&quot;today().toString().length() = 10&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testNow1</td>
+<td>&quot;Patient.birthDate &lt; now()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>undefined</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testNow2</td>
+<td>&quot;now().toString().length() &gt; 10&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEquality1</td>
+<td>&quot;1 = 1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEquality2</td>
+<td>&quot;{} = {}&quot;</td>
+<td>any</td>
+<td class="good"><pre>[]</pre></td>
+<td class="good"><pre>[]</pre></td>
+</tr>
+<tr>
+<td>testEquality3</td>
+<td>&quot;true = {}&quot;</td>
+<td>any</td>
+<td class="good"><pre>[]</pre></td>
+<td class="good"><pre>[]</pre></td>
+</tr>
+<tr>
+<td>testEquality4</td>
+<td>&quot;(1) = (1)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEquality5</td>
+<td>&quot;(1 | 2) = (1 | 2)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEquality6</td>
+<td>&quot;(1 | 2 | 3) = (1 | 2 | 3)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEquality7</td>
+<td>&quot;(1 | 1) = (1 | 2 | {})&quot;</td>
+<td>any</td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testEquality8</td>
+<td>&quot;1 = 2&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testEquality9</td>
+<td>&quot;&apos;a&apos; = &apos;a&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEquality10</td>
+<td>&quot;&apos;a&apos; = &apos;A&apos;&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testEquality11</td>
+<td>&quot;&apos;a&apos; = &apos;b&apos;&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testEquality12</td>
+<td>&quot;1.1 = 1.1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEquality13</td>
+<td>&quot;1.1 = 1.2&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testEquality14</td>
+<td>&quot;1.10 = 1.1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEquality15</td>
+<td>&quot;0 = 0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEquality16</td>
+<td>&quot;0.0 = 0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEquality17</td>
+<td>&quot;@2012-04-15 = @2012-04-15&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEquality18</td>
+<td>&quot;@2012-04-15 = @2012-04-16&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testEquality19</td>
+<td>&quot;@2012-04-15 = @2012-04-15T10:00:00&quot;</td>
+<td>any</td>
+<td class="mixed"><pre>[]</pre></td>
+<td class="mixed"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testEquality20</td>
+<td>&quot;@2012-04-15T15:00:00 = @2012-04-15T10:00:00&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testEquality21</td>
+<td>&quot;@2012-04-15T15:30:31 = @2012-04-15T15:30:31.0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEquality22</td>
+<td>&quot;@2012-04-15T15:30:31 = @2012-04-15T15:30:31.1&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testEquality23</td>
+<td>&quot;@2012-04-15T15:00:00Z = @2012-04-15T10:00:00&quot;</td>
+<td>any</td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testEquality24</td>
+<td>&quot;@2012-04-15T15:00:00+02:00 = @2012-04-15T16:00:00+03:00&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEquality25</td>
+<td>&quot;name = name&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEquality26</td>
+<td>&quot;name.take(2) = name.take(2).first() | name.take(2).last()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEquality27</td>
+<td>&quot;name.take(2) = name.take(2).last() | name.take(2).first()&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testEquality28</td>
+<td>&quot;Observation.value = 185 &apos;[lb_av]&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testNEquality1</td>
+<td>&quot;1 != 1&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testNEquality2</td>
+<td>&quot;{} != {}&quot;</td>
+<td>any</td>
+<td class="mixed"><pre>[]</pre></td>
+<td class="mixed"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testNEquality3</td>
+<td>&quot;1 != 2&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testNEquality4</td>
+<td>&quot;&apos;a&apos; != &apos;a&apos;&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testNEquality5</td>
+<td>&quot;&apos;a&apos; != &apos;b&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testNEquality6</td>
+<td>&quot;1.1 != 1.1&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testNEquality7</td>
+<td>&quot;1.1 != 1.2&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testNEquality8</td>
+<td>&quot;1.10 != 1.1&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testNEquality9</td>
+<td>&quot;0 != 0&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testNEquality10</td>
+<td>&quot;0.0 != 0&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testNEquality11</td>
+<td>&quot;@2012-04-15 != @2012-04-15&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testNEquality12</td>
+<td>&quot;@2012-04-15 != @2012-04-16&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testNEquality13</td>
+<td>&quot;@2012-04-15 != @2012-04-15T10:00:00&quot;</td>
+<td>any</td>
+<td class="mixed"><pre>[]</pre></td>
+<td class="mixed"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testNEquality14</td>
+<td>&quot;@2012-04-15T15:00:00 != @2012-04-15T10:00:00&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testNEquality15</td>
+<td>&quot;@2012-04-15T15:30:31 != @2012-04-15T15:30:31.0&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testNEquality16</td>
+<td>&quot;@2012-04-15T15:30:31 != @2012-04-15T15:30:31.1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testNEquality17</td>
+<td>&quot;@2012-04-15T15:00:00Z != @2012-04-15T10:00:00&quot;</td>
+<td>any</td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testNEquality18</td>
+<td>&quot;@2012-04-15T15:00:00+02:00 != @2012-04-15T16:00:00+03:00&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testNEquality19</td>
+<td>&quot;name != name&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testNEquality20</td>
+<td>&quot;name.take(2) != name.take(2).first() | name.take(2).last()&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testNEquality21</td>
+<td>&quot;name.take(2) != name.take(2).last() | name.take(2).first()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testNEquality22</td>
+<td>&quot;1.2 / 1.8 != 0.6666667&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testNEquality23</td>
+<td>&quot;1.2 / 1.8 != 0.67&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testNEquality24</td>
+<td>&quot;Observation.value != 185 &apos;kg&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEquivalent1</td>
+<td>&quot;1 ~ 1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEquivalent2</td>
+<td>&quot;{} ~ {}&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEquivalent3</td>
+<td>&quot;1 ~ {}&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="bad"><pre>[]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testEquivalent4</td>
+<td>&quot;1 ~ 2&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testEquivalent5</td>
+<td>&quot;&apos;a&apos; ~ &apos;a&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEquivalent6</td>
+<td>&quot;&apos;a&apos; ~ &apos;A&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEquivalent7</td>
+<td>&quot;&apos;a&apos; ~ &apos;b&apos;&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testEquivalent8</td>
+<td>&quot;1.1 ~ 1.1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEquivalent9</td>
+<td>&quot;1.1 ~ 1.2&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testEquivalent10</td>
+<td>&quot;1.10 ~ 1.1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEquivalent11</td>
+<td>&quot;1.2 / 1.8 ~ 0.67&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEquivalent12</td>
+<td>&quot;0 ~ 0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEquivalent13</td>
+<td>&quot;0.0 ~ 0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEquivalent14</td>
+<td>&quot;@2012-04-15 ~ @2012-04-15&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEquivalent15</td>
+<td>&quot;@2012-04-15 ~ @2012-04-16&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testEquivalent16</td>
+<td>&quot;@2012-04-15 ~ @2012-04-15T10:00:00&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testEquivalent17</td>
+<td>&quot;@2012-04-15T15:30:31 ~ @2012-04-15T15:30:31.0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEquivalent18</td>
+<td>&quot;@2012-04-15T15:30:31 ~ @2012-04-15T15:30:31.1&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testEquivalent19</td>
+<td>&quot;name ~ name&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEquivalent20</td>
+<td>&quot;name.take(2).given ~ name.take(2).first().given | name.take(2).last().given&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEquivalent21</td>
+<td>&quot;name.take(2).given ~ name.take(2).last().given | name.take(2).first().given&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testEquivalent22</td>
+<td>&quot;Observation.value ~ 185 &apos;[lb_av]&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testNotEquivalent1</td>
+<td>&quot;1 !~ 1&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testNotEquivalent2</td>
+<td>&quot;{} !~ {}&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testNotEquivalent3</td>
+<td>&quot;{} !~ 1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testNotEquivalent4</td>
+<td>&quot;1 !~ 2&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testNotEquivalent5</td>
+<td>&quot;&apos;a&apos; !~ &apos;a&apos;&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testNotEquivalent6</td>
+<td>&quot;&apos;a&apos; !~ &apos;A&apos;&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testNotEquivalent7</td>
+<td>&quot;&apos;a&apos; !~ &apos;b&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testNotEquivalent8</td>
+<td>&quot;1.1 !~ 1.1&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testNotEquivalent9</td>
+<td>&quot;1.1 !~ 1.2&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testNotEquivalent10</td>
+<td>&quot;1.10 !~ 1.1&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testNotEquivalent11</td>
+<td>&quot;0 !~ 0&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testNotEquivalent12</td>
+<td>&quot;0.0 !~ 0&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testNotEquivalent13</td>
+<td>&quot;1.2 / 1.8 !~ 0.6&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testNotEquivalent14</td>
+<td>&quot;@2012-04-15 !~ @2012-04-15&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testNotEquivalent15</td>
+<td>&quot;@2012-04-15 !~ @2012-04-16&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testNotEquivalent16</td>
+<td>&quot;@2012-04-15 !~ @2012-04-15T10:00:00&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testNotEquivalent17</td>
+<td>&quot;@2012-04-15T15:30:31 !~ @2012-04-15T15:30:31.0&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testNotEquivalent18</td>
+<td>&quot;@2012-04-15T15:30:31 !~ @2012-04-15T15:30:31.1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testNotEquivalent19</td>
+<td>&quot;name !~ name&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="mixed"><pre>[
+  false
+]</pre></td>
+<td class="mixed"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testNotEquivalent20</td>
+<td>&quot;name.take(2).given !~ name.take(2).first().given | name.take(2).last().given&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testNotEquivalent21</td>
+<td>&quot;name.take(2).given !~ name.take(2).last().given | name.take(2).first().given&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="bad"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testNotEquivalent22</td>
+<td>&quot;Observation.value !~ 185 &apos;kg&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLessThan1</td>
+<td>&quot;1 &lt; 2&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLessThan2</td>
+<td>&quot;1.0 &lt; 1.2&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLessThan3</td>
+<td>&quot;&apos;a&apos; &lt; &apos;b&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLessThan4</td>
+<td>&quot;&apos;A&apos; &lt; &apos;a&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLessThan5</td>
+<td>&quot;@2014-12-12 &lt; @2014-12-13&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLessThan6</td>
+<td>&quot;@2014-12-13T12:00:00 &lt; @2014-12-13T12:00:01&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLessThan7</td>
+<td>&quot;@T12:00:00 &lt; @T14:00:00&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLessThan8</td>
+<td>&quot;1 &lt; 1&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testLessThan9</td>
+<td>&quot;1.0 &lt; 1.0&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testLessThan10</td>
+<td>&quot;&apos;a&apos; &lt; &apos;a&apos;&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testLessThan11</td>
+<td>&quot;&apos;A&apos; &lt; &apos;A&apos;&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testLessThan12</td>
+<td>&quot;@2014-12-12 &lt; @2014-12-12&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testLessThan13</td>
+<td>&quot;@2014-12-13T12:00:00 &lt; @2014-12-13T12:00:00&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testLessThan14</td>
+<td>&quot;@T12:00:00 &lt; @T12:00:00&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testLessThan15</td>
+<td>&quot;2 &lt; 1&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testLessThan16</td>
+<td>&quot;1.1 &lt; 1.0&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testLessThan17</td>
+<td>&quot;&apos;b&apos; &lt; &apos;a&apos;&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testLessThan18</td>
+<td>&quot;&apos;B&apos; &lt; &apos;A&apos;&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testLessThan19</td>
+<td>&quot;@2014-12-13 &lt; @2014-12-12&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testLessThan20</td>
+<td>&quot;@2014-12-13T12:00:01 &lt; @2014-12-13T12:00:00&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testLessThan21</td>
+<td>&quot;@T12:00:01 &lt; @T12:00:00&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testLessThan22</td>
+<td>&quot;Observation.value &lt; 200 &apos;[lb_av]&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLessThan23</td>
+<td>&quot;@2018-03 &lt; @2018-03-01&quot;</td>
+<td>any</td>
+<td class="mixed"><pre>[]</pre></td>
+<td class="mixed"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLessThan24</td>
+<td>&quot;@2018-03-01T10 &lt; @2018-03-01T10:30&quot;</td>
+<td>any</td>
+<td class="mixed"><pre>[]</pre></td>
+<td class="mixed"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testLessThan25</td>
+<td>&quot;@T10 &lt; @T10:30&quot;</td>
+<td>any</td>
+<td class="mixed"><pre>[]</pre></td>
+<td class="mixed"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLessThan26</td>
+<td>&quot;@2018-03-01T10:30:00 &lt; @2018-03-01T10:30:00.0&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testLessThan27</td>
+<td>&quot;@T10:30:00 &lt; @T10:30:00.0&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testLessOrEqual1</td>
+<td>&quot;1 &lt;= 2&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLessOrEqual2</td>
+<td>&quot;1.0 &lt;= 1.2&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLessOrEqual3</td>
+<td>&quot;&apos;a&apos; &lt;= &apos;b&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLessOrEqual4</td>
+<td>&quot;&apos;A&apos; &lt;= &apos;a&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLessOrEqual5</td>
+<td>&quot;@2014-12-12 &lt;= @2014-12-13&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLessOrEqual6</td>
+<td>&quot;@2014-12-13T12:00:00 &lt;= @2014-12-13T12:00:01&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLessOrEqual7</td>
+<td>&quot;@T12:00:00 &lt;= @T14:00:00&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLessOrEqual8</td>
+<td>&quot;1 &lt;= 1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLessOrEqual9</td>
+<td>&quot;1.0 &lt;= 1.0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLessOrEqual10</td>
+<td>&quot;&apos;a&apos; &lt;= &apos;a&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLessOrEqual11</td>
+<td>&quot;&apos;A&apos; &lt;= &apos;A&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLessOrEqual12</td>
+<td>&quot;@2014-12-12 &lt;= @2014-12-12&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLessOrEqual13</td>
+<td>&quot;@2014-12-13T12:00:00 &lt;= @2014-12-13T12:00:00&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLessOrEqual14</td>
+<td>&quot;@T12:00:00 &lt;= @T12:00:00&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLessOrEqual15</td>
+<td>&quot;2 &lt;= 1&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testLessOrEqual16</td>
+<td>&quot;1.1 &lt;= 1.0&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testLessOrEqual17</td>
+<td>&quot;&apos;b&apos; &lt;= &apos;a&apos;&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testLessOrEqual18</td>
+<td>&quot;&apos;B&apos; &lt;= &apos;A&apos;&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testLessOrEqual19</td>
+<td>&quot;@2014-12-13 &lt;= @2014-12-12&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testLessOrEqual20</td>
+<td>&quot;@2014-12-13T12:00:01 &lt;= @2014-12-13T12:00:00&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testLessOrEqual21</td>
+<td>&quot;@T12:00:01 &lt;= @T12:00:00&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testLessOrEqual22</td>
+<td>&quot;Observation.value &lt;= 200 &apos;[lb_av]&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLessOrEqual23</td>
+<td>&quot;@2018-03 &lt;= @2018-03-01&quot;</td>
+<td>any</td>
+<td class="mixed"><pre>[]</pre></td>
+<td class="mixed"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLessOrEqual24</td>
+<td>&quot;@2018-03-01T10 &lt;= @2018-03-01T10:30&quot;</td>
+<td>any</td>
+<td class="mixed"><pre>[]</pre></td>
+<td class="mixed"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testLessOrEqual25</td>
+<td>&quot;@T10 &lt;= @T10:30&quot;</td>
+<td>any</td>
+<td class="mixed"><pre>[]</pre></td>
+<td class="mixed"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLessOrEqual26</td>
+<td>&quot;@2018-03-01T10:30:00  &lt;= @2018-03-01T10:30:00.0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLessOrEqual27</td>
+<td>&quot;@T10:30:00 &lt;= @T10:30:00.0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testGreatorOrEqual1</td>
+<td>&quot;1 &gt;= 2&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testGreatorOrEqual2</td>
+<td>&quot;1.0 &gt;= 1.2&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testGreatorOrEqual3</td>
+<td>&quot;&apos;a&apos; &gt;= &apos;b&apos;&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testGreatorOrEqual4</td>
+<td>&quot;&apos;A&apos; &gt;= &apos;a&apos;&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testGreatorOrEqual5</td>
+<td>&quot;@2014-12-12 &gt;= @2014-12-13&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testGreatorOrEqual6</td>
+<td>&quot;@2014-12-13T12:00:00 &gt;= @2014-12-13T12:00:01&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testGreatorOrEqual7</td>
+<td>&quot;@T12:00:00 &gt;= @T14:00:00&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testGreatorOrEqual8</td>
+<td>&quot;1 &gt;= 1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testGreatorOrEqual9</td>
+<td>&quot;1.0 &gt;= 1.0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testGreatorOrEqual10</td>
+<td>&quot;&apos;a&apos; &gt;= &apos;a&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testGreatorOrEqual11</td>
+<td>&quot;&apos;A&apos; &gt;= &apos;A&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testGreatorOrEqual12</td>
+<td>&quot;@2014-12-12 &gt;= @2014-12-12&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testGreatorOrEqual13</td>
+<td>&quot;@2014-12-13T12:00:00 &gt;= @2014-12-13T12:00:00&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testGreatorOrEqual14</td>
+<td>&quot;@T12:00:00 &gt;= @T12:00:00&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testGreatorOrEqual15</td>
+<td>&quot;2 &gt;= 1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testGreatorOrEqual16</td>
+<td>&quot;1.1 &gt;= 1.0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testGreatorOrEqual17</td>
+<td>&quot;&apos;b&apos; &gt;= &apos;a&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testGreatorOrEqual18</td>
+<td>&quot;&apos;B&apos; &gt;= &apos;A&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testGreatorOrEqual19</td>
+<td>&quot;@2014-12-13 &gt;= @2014-12-12&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testGreatorOrEqual20</td>
+<td>&quot;@2014-12-13T12:00:01 &gt;= @2014-12-13T12:00:00&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testGreatorOrEqual21</td>
+<td>&quot;@T12:00:01 &gt;= @T12:00:00&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testGreatorOrEqual22</td>
+<td>&quot;Observation.value &gt;= 100 &apos;[lb_av]&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testGreatorOrEqual23</td>
+<td>&quot;@2018-03 &gt;= @2018-03-01&quot;</td>
+<td>any</td>
+<td class="mixed"><pre>[]</pre></td>
+<td class="mixed"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testGreatorOrEqual24</td>
+<td>&quot;@2018-03-01T10 &gt;= @2018-03-01T10:30&quot;</td>
+<td>any</td>
+<td class="mixed"><pre>[]</pre></td>
+<td class="mixed"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testGreatorOrEqual25</td>
+<td>&quot;@T10 &gt;= @T10:30&quot;</td>
+<td>any</td>
+<td class="mixed"><pre>[]</pre></td>
+<td class="mixed"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testGreatorOrEqual26</td>
+<td>&quot;@2018-03-01T10:30:00 &gt;= @2018-03-01T10:30:00.0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testGreatorOrEqual27</td>
+<td>&quot;@T10:30:00 &gt;= @T10:30:00.0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testGreaterThan1</td>
+<td>&quot;1 &gt; 2&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testGreaterThan2</td>
+<td>&quot;1.0 &gt; 1.2&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testGreaterThan3</td>
+<td>&quot;&apos;a&apos; &gt; &apos;b&apos;&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testGreaterThan4</td>
+<td>&quot;&apos;A&apos; &gt; &apos;a&apos;&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testGreaterThan5</td>
+<td>&quot;@2014-12-12 &gt; @2014-12-13&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testGreaterThan6</td>
+<td>&quot;@2014-12-13T12:00:00 &gt; @2014-12-13T12:00:01&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testGreaterThan7</td>
+<td>&quot;@T12:00:00 &gt; @T14:00:00&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testGreaterThan8</td>
+<td>&quot;1 &gt; 1&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testGreaterThan9</td>
+<td>&quot;1.0 &gt; 1.0&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testGreaterThan10</td>
+<td>&quot;&apos;a&apos; &gt; &apos;a&apos;&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testGreaterThan11</td>
+<td>&quot;&apos;A&apos; &gt; &apos;A&apos;&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testGreaterThan12</td>
+<td>&quot;@2014-12-12 &gt; @2014-12-12&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testGreaterThan13</td>
+<td>&quot;@2014-12-13T12:00:00 &gt; @2014-12-13T12:00:00&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testGreaterThan14</td>
+<td>&quot;@T12:00:00 &gt; @T12:00:00&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testGreaterThan15</td>
+<td>&quot;2 &gt; 1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testGreaterThan16</td>
+<td>&quot;1.1 &gt; 1.0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testGreaterThan17</td>
+<td>&quot;&apos;b&apos; &gt; &apos;a&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testGreaterThan18</td>
+<td>&quot;&apos;B&apos; &gt; &apos;A&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testGreaterThan19</td>
+<td>&quot;@2014-12-13 &gt; @2014-12-12&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testGreaterThan20</td>
+<td>&quot;@2014-12-13T12:00:01 &gt; @2014-12-13T12:00:00&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testGreaterThan21</td>
+<td>&quot;@T12:00:01 &gt; @T12:00:00&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testGreaterThan22</td>
+<td>&quot;Observation.value &gt; 100 &apos;[lb_av]&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testGreaterThan23</td>
+<td>&quot;@2018-03 &gt; @2018-03-01&quot;</td>
+<td>any</td>
+<td class="mixed"><pre>[]</pre></td>
+<td class="mixed"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testGreaterThan24</td>
+<td>&quot;@2018-03-01T10 &gt; @2018-03-01T10:30&quot;</td>
+<td>any</td>
+<td class="mixed"><pre>[]</pre></td>
+<td class="mixed"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testGreaterThan25</td>
+<td>&quot;@T10 &gt; @T10:30&quot;</td>
+<td>any</td>
+<td class="mixed"><pre>[]</pre></td>
+<td class="mixed"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testGreaterThan26</td>
+<td>&quot;@2018-03-01T10:30:00 &gt; @2018-03-01T10:30:00.0&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testGreaterThan27</td>
+<td>&quot;@T10:30:00 &gt; @T10:30:00.0&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testUnion1</td>
+<td>&quot;(1 | 2 | 3).count() = 3&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testUnion2</td>
+<td>&quot;(1 | 2 | 2).count() = 2&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testUnion3</td>
+<td>&quot;(1|1).count() = 1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testUnion4</td>
+<td>&quot;1.union(2).union(3).count() = 3&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testUnion5</td>
+<td>&quot;1.union(2.union(3)).count() = 3&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testUnion6</td>
+<td>&quot;(1 | 2).combine(2).count() = 3&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testUnion7</td>
+<td>&quot;1.combine(1).count() = 2&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testUnion8</td>
+<td>&quot;1.combine(1).union(2).count() = 2&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testIntersect1</td>
+<td>&quot;(1 | 2 | 3).intersect(2 | 4) = 2&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testIntersect2</td>
+<td>&quot;(1 | 2).intersect(4).empty()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testIntersect3</td>
+<td>&quot;(1 | 2).intersect({}).empty()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testIntersect4</td>
+<td>&quot;1.combine(1).intersect(1).count() = 1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testExclude1</td>
+<td>&quot;(1 | 2 | 3).exclude(2 | 4) = 1 | 3&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testExclude2</td>
+<td>&quot;(1 | 2).exclude(4) = 1 | 2&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testExclude3</td>
+<td>&quot;(1 | 2).exclude({}) = 1 | 2&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testExclude4</td>
+<td>&quot;1.combine(1).exclude(2).count() = 2&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testIn1</td>
+<td>&quot;1 in (1 | 2 | 3)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testIn2</td>
+<td>&quot;1 in (2 | 3)&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testIn3</td>
+<td>&quot;&apos;a&apos; in (&apos;a&apos; | &apos;c&apos; | &apos;d&apos;)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testIn4</td>
+<td>&quot;&apos;b&apos; in (&apos;a&apos; | &apos;c&apos; | &apos;d&apos;)&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testContainsCollection1</td>
+<td>&quot;(1 | 2 | 3) contains 1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testContainsCollection2</td>
+<td>&quot;(2 | 3) contains 1&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testContainsCollection3</td>
+<td>&quot;(&apos;a&apos; | &apos;c&apos; | &apos;d&apos;) contains &apos;a&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testContainsCollection4</td>
+<td>&quot;(&apos;a&apos; | &apos;c&apos; | &apos;d&apos;) contains &apos;b&apos;&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLogicAnd1</td>
+<td>&quot;(true and true) = true&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLogicAnd2</td>
+<td>&quot;(true and false) = false&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLogicAnd3</td>
+<td>&quot;(true and {}).empty()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLogicAnd4</td>
+<td>&quot;(false and true) = false&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLogicAnd5</td>
+<td>&quot;(false and false) = false&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLogicAnd6</td>
+<td>&quot;(false and {}) = false&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLogicAnd7</td>
+<td>&quot;({} and true).empty()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLogicAnd8</td>
+<td>&quot;({} and false) = false&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLogicAnd9</td>
+<td>&quot;({} and {}).empty()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLogicOr1</td>
+<td>&quot;(true or true) = true&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLogicOr2</td>
+<td>&quot;(true or false) = true&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLogicOr3</td>
+<td>&quot;(true or {}) = true&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLogicOr4</td>
+<td>&quot;(false or true) = true&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLogicOr5</td>
+<td>&quot;(false or false) = false&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLogicOr6</td>
+<td>&quot;(false or {}).empty()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLogicOr7</td>
+<td>&quot;({} or true) = true&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLogicOr8</td>
+<td>&quot;({} or false).empty()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLogicOr9</td>
+<td>&quot;({} or {}).empty()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLogicXOr1</td>
+<td>&quot;(true xor true) = false&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLogicXOr2</td>
+<td>&quot;(true xor false) = true&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLogicXOr3</td>
+<td>&quot;(true xor {}).empty()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLogicXOr4</td>
+<td>&quot;(false xor true) = true&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLogicXOr5</td>
+<td>&quot;(false xor false) = false&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLogicXOr6</td>
+<td>&quot;(false xor {}).empty()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLogicXOr7</td>
+<td>&quot;({} xor true).empty()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLogicXOr8</td>
+<td>&quot;({} xor false).empty()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanLogicXOr9</td>
+<td>&quot;({} xor {}).empty()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanImplies1</td>
+<td>&quot;(true implies true) = true&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanImplies2</td>
+<td>&quot;(true implies false) = false&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanImplies3</td>
+<td>&quot;(true implies {}).empty()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanImplies4</td>
+<td>&quot;(false implies true) = true&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanImplies5</td>
+<td>&quot;(false implies false) = true&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanImplies6</td>
+<td>&quot;(false implies {}) = true&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanImplies7</td>
+<td>&quot;({} implies true) = true&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanImplies8</td>
+<td>&quot;({} implies false).empty()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testBooleanImplies9</td>
+<td>&quot;({} implies {}).empty()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testPlus1</td>
+<td>&quot;1 + 1 = 2&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testPlus2</td>
+<td>&quot;1 + 0 = 1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testPlus3</td>
+<td>&quot;1.2 + 1.8 = 3.0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testPlus4</td>
+<td>&quot;&apos;a&apos;+&apos;b&apos; = &apos;ab&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testConcatenate1</td>
+<td>&quot;&apos;a&apos; &amp; &apos;b&apos; = &apos;ab&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testConcatenate2</td>
+<td>&quot;&apos;1&apos; &amp; {} = &apos;1&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testConcatenate3</td>
+<td>&quot;{} &amp; &apos;b&apos; = &apos;b&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testConcatenate4</td>
+<td>&quot;(1 | 2 | 3) &amp; &apos;b&apos; = &apos;1,2,3b&apos;&quot;</td>
+<td>invalid</td>
+<td class="mixed"><pre>Unexpected collection[1,2,3]; expected singleton of type String</pre></td>
+<td class="mixed"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testMinus1</td>
+<td>&quot;1 - 1 = 0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testMinus2</td>
+<td>&quot;1 - 0 = 1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testMinus3</td>
+<td>&quot;1.8 - 1.2 = 0.6&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testMinus4</td>
+<td>&quot;&apos;a&apos;-&apos;b&apos; = &apos;ab&apos;&quot;</td>
+<td>invalid</td>
+<td class="mixed"><pre>Cannot [&quot;a&quot;] - [&quot;b&quot;]</pre></td>
+<td class="mixed"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testMultiply1</td>
+<td>&quot;1.2 * 1.8 = 2.16&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testMultiply2</td>
+<td>&quot;1 * 1 = 1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testMultiply3</td>
+<td>&quot;1 * 0 = 0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testDivide1</td>
+<td>&quot;1 / 1 = 1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testDivide2</td>
+<td>&quot;4 / 2 = 2&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testDivide3</td>
+<td>&quot;4.0 / 2.0 = 2.0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testDivide4</td>
+<td>&quot;1 / 2 = 0.5&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testDivide5</td>
+<td>&quot;1.2 / 1.8 = 0.66666667&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testDivide6</td>
+<td>&quot;1 / 0&quot;</td>
+<td>any</td>
+<td class="mixed"><pre>[]</pre></td>
+<td class="mixed"><pre>[
+  null
+]</pre></td>
+</tr>
+<tr>
+<td>testDiv1</td>
+<td>&quot;1 div 1 = 1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testDiv2</td>
+<td>&quot;4 div 2 = 2&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testDiv3</td>
+<td>&quot;5 div 2 = 2&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testDiv4</td>
+<td>&quot;2.2 div 1.8 = 1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testDiv5</td>
+<td>&quot;5 div 0&quot;</td>
+<td>any</td>
+<td class="mixed"><pre>[]</pre></td>
+<td class="mixed"><pre>[
+  0
+]</pre></td>
+</tr>
+<tr>
+<td>testMod1</td>
+<td>&quot;1 mod 1 = 0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testMod2</td>
+<td>&quot;4 mod 2 = 0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testMod3</td>
+<td>&quot;5 mod 2 = 1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testMod4</td>
+<td>&quot;2.2 mod 1.8 = 0.4&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testMod5</td>
+<td>&quot;5 mod 0&quot;</td>
+<td>any</td>
+<td class="mixed"><pre>[]</pre></td>
+<td class="mixed"><pre>[
+  null
+]</pre></td>
+</tr>
+<tr>
+<td>testRound1</td>
+<td>&quot;1.round() = 1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testRound2</td>
+<td>&quot;3.14159.round(3) = 2&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="mixed"><pre>[
+  false
+]</pre></td>
+<td class="mixed"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testSqrt1</td>
+<td>&quot;81.sqrt() = 9.0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testSqrt2</td>
+<td>&quot;(-1).sqrt()&quot;</td>
+<td>any</td>
+<td class="mixed"><pre>[]</pre></td>
+<td class="mixed"><pre>[
+  null
+]</pre></td>
+</tr>
+<tr>
+<td>testAbs1</td>
+<td>&quot;(-5).abs() = 5&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testAbs2</td>
+<td>&quot;(-5.5).abs() = 5.5&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testAbs3</td>
+<td>&quot;(-5.5 &apos;mg&apos;).abs() = 5.5 &apos;mg&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testCeiling1</td>
+<td>&quot;1.ceiling() = 1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testCeiling2</td>
+<td>&quot;(-1.1).ceiling() = -1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testCeiling3</td>
+<td>&quot;1.1.ceiling() = 2&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testExp1</td>
+<td>&quot;0.exp() = 1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testExp2</td>
+<td>&quot;(-0.0).exp() = 1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testFloor1</td>
+<td>&quot;1.floor() = 1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testFloor2</td>
+<td>&quot;2.1.floor() = 2&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testFloor3</td>
+<td>&quot;(-2.1).floor() = -3&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLn1</td>
+<td>&quot;1.ln() = 0.0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLn2</td>
+<td>&quot;1.0.ln() = 0.0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLog1</td>
+<td>&quot;16.log(2) = 4.0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testLog2</td>
+<td>&quot;100.0.log(10.0) = 2.0&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testPower1</td>
+<td>&quot;2.power(3) = 8&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testPower2</td>
+<td>&quot;2.5.power(2) = 6.25&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testPower3</td>
+<td>&quot;(-1).power(0.5)&quot;</td>
+<td>any</td>
+<td class="mixed"><pre>[]</pre></td>
+<td class="mixed"><pre>[
+  null
+]</pre></td>
+</tr>
+<tr>
+<td>testTruncate1</td>
+<td>&quot;101.truncate() = 101&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testTruncate2</td>
+<td>&quot;1.00000001.truncate() = 1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testTruncate3</td>
+<td>&quot;(-1.56).truncate() = -1&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>test unary precedence</td>
+<td>&quot;-1.convertsToInteger()&quot;</td>
+<td>invalid</td>
+<td class="mixed"><pre>Unary - can only be applied to a number or Quantity.</pre></td>
+<td class="mixed"><pre>[
+  -1
+]</pre></td>
+</tr>
+<tr>
+<td>testPrecedence2</td>
+<td>&quot;1+2*3+4 = 11&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testPrecedence3</td>
+<td>&quot;1 &gt; 2 is Boolean&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testPrecedence4</td>
+<td>&quot;1 | 1 is Integer&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[
+  1,
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testVariables1</td>
+<td>&quot;%sct = &apos;http://snomed.info/sct&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>Attempting to access an undefined environment variable: sct</pre></td>
+<td class="bad"><pre>FhirPathError on &quot;%sct = &apos;http://snomed.info/sct&apos;&quot;: Error: Undefined variable %sct</pre></td>
+</tr>
+<tr>
+<td>testVariables2</td>
+<td>&quot;%loinc = &apos;http://loinc.org&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>Attempting to access an undefined environment variable: loinc</pre></td>
+<td class="bad"><pre>FhirPathError on &quot;%loinc = &apos;http://loinc.org&apos;&quot;: Error: Undefined variable %loinc</pre></td>
+</tr>
+<tr>
+<td>testVariables3</td>
+<td>&quot;%ucum = &apos;http://unitsofmeasure.org&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>FhirPathError on &quot;%ucum = &apos;http://unitsofmeasure.org&apos;&quot;: Error: Undefined variable %ucum</pre></td>
+</tr>
+<tr>
+<td>testVariables4</td>
+<td>&quot;%`vs-administrative-gender` = &apos;http://hl7.org/fhir/ValueSet/administrative-gender&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>Attempting to access an undefined environment variable: vs-administrative-gender</pre></td>
+<td class="bad"><pre>Parse error at &quot;%&quot; (line 1, column 0). No matching prefix parselet.</pre></td>
+</tr>
+<tr>
+<td>testExtension1</td>
+<td>&quot;Patient.birthDate.extension(&apos;http://hl7.org/fhir/StructureDefinition/patient-birthTime&apos;).exists()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>FhirPathError on &quot;Patient.birthDate.extension(&apos;http://hl7.org/fhir/StructureDefinition/patient-birthTime&apos;).exists()&quot;: Error: Unrecognized function: extension</pre></td>
+</tr>
+<tr>
+<td>testExtension2</td>
+<td>&quot;Patient.birthDate.extension(%`ext-patient-birthTime`).exists()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>Attempting to access an undefined environment variable: ext-patient-birthTime</pre></td>
+<td class="bad"><pre>Parse error at &quot;%&quot; (line 1, column 28). No matching prefix parselet.</pre></td>
+</tr>
+<tr>
+<td>testExtension3</td>
+<td>&quot;Patient.birthDate.extension(&apos;http://hl7.org/fhir/StructureDefinition/patient-birthTime1&apos;).empty()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>FhirPathError on &quot;Patient.birthDate.extension(&apos;http://hl7.org/fhir/StructureDefinition/patient-birthTime1&apos;).empty()&quot;: Error: Unrecognized function: extension</pre></td>
+</tr>
+<tr>
+<td>testType1</td>
+<td>&quot;1.type().namespace = &apos;System&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testType2</td>
+<td>&quot;1.type().name = &apos;Integer&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testType3</td>
+<td>&quot;true.type().namespace = &apos;System&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testType4</td>
+<td>&quot;true.type().name = &apos;Boolean&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testType5</td>
+<td>&quot;true.is(Boolean)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testType6</td>
+<td>&quot;true.is(System.Boolean)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testType7</td>
+<td>&quot;true is Boolean&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testType8</td>
+<td>&quot;true is System.Boolean&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testType9</td>
+<td>&quot;Patient.active.type().namespace = &apos;FHIR&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="mixed"><pre>[
+  false
+]</pre></td>
+<td class="mixed"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testType10</td>
+<td>&quot;Patient.active.type().name = &apos;boolean&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="mixed"><pre>[
+  false
+]</pre></td>
+<td class="mixed"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testType11</td>
+<td>&quot;Patient.active.is(boolean)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>&quot;boolean&quot; cannot be resolved to a valid type identifier</pre></td>
+<td class="bad"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testType12</td>
+<td>&quot;Patient.active.is(Boolean).not()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="mixed"><pre>[
+  false
+]</pre></td>
+<td class="mixed"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testType13</td>
+<td>&quot;Patient.active.is(FHIR.boolean)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>&quot;FHIR.boolean&quot; cannot be resolved to a valid type identifier</pre></td>
+<td class="bad"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testType14</td>
+<td>&quot;Patient.active.is(System.Boolean).not()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testType15</td>
+<td>&quot;Patient.type().namespace = &apos;FHIR&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testType16</td>
+<td>&quot;Patient.type().name = &apos;Patient&apos;&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>[
+  false
+]</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testType17</td>
+<td>&quot;Patient.is(Patient)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>&quot;Patient&quot; cannot be resolved to a valid type identifier</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testType18</td>
+<td>&quot;Patient.is(FHIR.Patient)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>&quot;FHIR.Patient&quot; cannot be resolved to a valid type identifier</pre></td>
+<td class="bad"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testType19</td>
+<td>&quot;Patient.is(FHIR.`Patient`)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>&quot;FHIR.Patient&quot; cannot be resolved to a valid type identifier</pre></td>
+<td class="bad"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testType20</td>
+<td>&quot;Patient.ofType(Patient).type().name&quot;</td>
+<td><pre>[
+  &quot;Patient&quot;
+]</pre></td>
+<td class="bad"><pre>&quot;Patient&quot; cannot be resolved to a valid type identifier</pre></td>
+<td class="good"><pre>[
+  &quot;Patient&quot;
+]</pre></td>
+</tr>
+<tr>
+<td>testType21</td>
+<td>&quot;Patient.ofType(FHIR.Patient).type().name&quot;</td>
+<td><pre>[
+  &quot;Patient&quot;
+]</pre></td>
+<td class="bad"><pre>&quot;FHIR.Patient&quot; cannot be resolved to a valid type identifier</pre></td>
+<td class="bad"><pre>[]</pre></td>
+</tr>
+<tr>
+<td>testType22</td>
+<td>&quot;Patient.is(System.Patient).not()&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>&quot;System.Patient&quot; cannot be resolved to a valid type identifier</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testType23</td>
+<td>&quot;Patient.ofType(FHIR.`Patient`).type().name&quot;</td>
+<td><pre>[
+  &quot;Patient&quot;
+]</pre></td>
+<td class="bad"><pre>&quot;FHIR.Patient&quot; cannot be resolved to a valid type identifier</pre></td>
+<td class="bad"><pre>[]</pre></td>
+</tr>
+<tr>
+<td>testConformsTo</td>
+<td>&quot;conformsTo(&apos;http://hl7.org/fhir/StructureDefinition/Patient&apos;)&quot;</td>
+<td><pre>[
+  true
+]</pre></td>
+<td class="bad"><pre>Not implemented: conformsTo</pre></td>
+<td class="good"><pre>[
+  true
+]</pre></td>
+</tr>
+<tr>
+<td>testConformsTo</td>
+<td>&quot;conformsTo(&apos;http://hl7.org/fhir/StructureDefinition/Person&apos;)&quot;</td>
+<td><pre>[
+  false
+]</pre></td>
+<td class="bad"><pre>Not implemented: conformsTo</pre></td>
+<td class="good"><pre>[
+  false
+]</pre></td>
+</tr>
+<tr>
+<td>testConformsTo</td>
+<td>&quot;conformsTo(&apos;http://trash&apos;)&quot;</td>
+<td>invalid</td>
+<td class="mixed"><pre>Not implemented: conformsTo</pre></td>
+<td class="mixed"><pre>FhirPathError on &quot;conformsTo(&apos;http://trash&apos;)&quot;: Error: Expected a StructureDefinition URL</pre></td>
+</tr>
+<tr><td></td><td></td><td>Good</td><td>583</td><td>596</td></tr>
+<tr><td></td><td></td><td>Mixed</td><td>46</td><td>46</td></tr>
+<tr><td></td><td></td><td>Bad</td><td>56</td><td>43</td></tr>
+</tbody
+</table
+</body
+</html>
